@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/favicon.png" />
+    <title>MX Admin</title>
+    <script>
+      ;(function () {
+        try {
+          var mode = localStorage.getItem('theme-mode')
+          var isDark =
+            mode === 'dark' ||
+            (mode !== 'light' &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches)
+          if (isDark) document.documentElement.classList.add('dark')
+        } catch (e) {}
+      })()
+    </script>
+    <style>
+      #initial-loader {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #fff;
+        color: #999;
+        font: 14px/1.4 -apple-system, BlinkMacSystemFont, sans-serif;
+      }
+      html.dark #initial-loader {
+        background: #0a0a0a;
+        color: #666;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="initial-loader">Loading…</div>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

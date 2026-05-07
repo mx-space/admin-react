@@ -1,0 +1,1 @@
+../../admin-vue3/docs/master-detail-layout.md
