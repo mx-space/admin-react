@@ -137,4 +137,8 @@ src/
 
 ## Status
 
-P0 complete (2026-05-07): repo scaffolding, vite/tsconfig/oxlint, css.ts pipeline, query client, theme bootstrap. Next: spec 02 (design tokens) and spec 03 (5 primitives — Button/Input/Card/Modal/Toast).
+Migration status is **not** tracked here. Single source of truth:
+
+→ [docs/superpowers/specs/2026-05-06-react-migration/STATUS.md](./docs/superpowers/specs/2026-05-06-react-migration/STATUS.md)
+
+Read it before starting work to know which spec is current. Update it whenever a spec advances, completes, stalls, or is deferred — and append one line to its changelog. Do not mirror status back into this file.

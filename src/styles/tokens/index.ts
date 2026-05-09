@@ -1,3 +1,5 @@
+export { chrome } from './chrome'
+export type { ChromeToken } from './chrome'
 export { color } from './color'
 export type { ColorToken } from './color'
 export { elevation } from './elevation'

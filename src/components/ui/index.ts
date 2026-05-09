@@ -10,6 +10,7 @@ export {
   type InputRootProps,
 } from './Input'
 export { Card, type CardProps } from './Card'
+export { Drawer, type DrawerContentProps, type DrawerRootProps } from './Drawer'
 export { Modal, type ModalContentProps, type ModalRootProps } from './Modal'
 export {
   ModalHost,

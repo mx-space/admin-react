@@ -21,9 +21,19 @@
       "~/*": ["src/*"]
     },
     "ignoreDeprecations": "6.0",
-    "types": ["vite/client", "node"],
+    "types": [
+      "vite/client",
+      "node",
+      "vitest/globals",
+      "@testing-library/jest-dom/vitest"
+    ],
     "allowImportingTsExtensions": false,
     "noEmit": true
   },
-  "include": ["src", "src/env.d.ts", "vite.config.ts"]
+  "include": [
+    "src",
+    "src/env.d.ts",
+    "vite.config.ts",
+    "vitest.config.ts"
+  ]
 }

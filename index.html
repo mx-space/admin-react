@@ -7,11 +7,36 @@
     <title>MX Admin</title>
     <script>
       ;(function () {
+        var STORE_KEY = 'mx-admin:ui'
+        var LEGACY_KEY = 'theme-mode'
         try {
-          var mode = localStorage.getItem('theme-mode')
+          var mode = null
+          var raw = localStorage.getItem(STORE_KEY)
+          if (raw) {
+            try {
+              var parsed = JSON.parse(raw)
+              mode = parsed && parsed.state && parsed.state.themeMode
+            } catch (_) {}
+          }
+          if (!mode) {
+            var legacy = localStorage.getItem(LEGACY_KEY)
+            if (legacy) {
+              mode = legacy
+              try {
+                localStorage.setItem(
+                  STORE_KEY,
+                  JSON.stringify({
+                    state: { themeMode: legacy, sidebarCollapsed: false },
+                    version: 1,
+                  }),
+                )
+              } catch (_) {}
+            }
+          }
+          if (!mode) mode = 'system'
           var isDark =
             mode === 'dark' ||
-            (mode !== 'light' &&
+            (mode === 'system' &&
               window.matchMedia('(prefers-color-scheme: dark)').matches)
           if (isDark) document.documentElement.classList.add('dark')
         } catch (e) {}
