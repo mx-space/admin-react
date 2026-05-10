@@ -1,9 +1,18 @@
-import { flexRender, type Table } from '@tanstack/react-table'
+import type { CSSProperties } from 'react'
+import { flexRender, type Cell, type Table } from '@tanstack/react-table'
 import type { ReactNode } from 'react'
+
+import { cx } from '~/utils/cx'
 
 import type { TableDensity } from '~/atoms/table'
 
-import { cellRecipe, rowRecipe } from '../DataTable.css'
+import {
+  cellRecipe,
+  rowRecipe,
+  stickyBodyCellStyle,
+  stickyEdgeLeftStyle,
+  stickyEdgeRightStyle,
+} from '../DataTable.css'
 
 import { TableEmpty } from './TableEmpty'
 import { TableLoading } from './TableLoading'
@@ -14,6 +23,17 @@ export interface TableBodyProps<T> {
   density?: TableDensity
   empty?: ReactNode
   onRowClick?: (row: T) => void
+}
+
+const computeStickyStyle = <T,>(
+  cell: Cell<T, unknown>,
+): CSSProperties | undefined => {
+  const pin = cell.column.getIsPinned()
+  if (!pin) return undefined
+  if (pin === 'left') {
+    return { position: 'sticky', left: `${cell.column.getStart('left')}px` }
+  }
+  return { position: 'sticky', right: `${cell.column.getAfter('right')}px` }
 }
 
 export const TableBody = <T,>({
@@ -57,11 +77,25 @@ export const TableBody = <T,>({
             const meta = cell.column.columnDef.meta
             const align = meta?.align ?? 'start'
             const width = meta?.width
+            const pin = cell.column.getIsPinned()
+            const isLastLeftPinned =
+              pin === 'left' && cell.column.getIsLastColumn('left')
+            const isFirstRightPinned =
+              pin === 'right' && cell.column.getIsFirstColumn('right')
+            const stickyStyle = computeStickyStyle(cell)
             return (
               <td
                 key={cell.id}
-                className={cellRecipe({ density, align })}
-                style={width ? { width } : undefined}
+                className={cx(
+                  cellRecipe({ density, align }),
+                  pin ? stickyBodyCellStyle : null,
+                  isLastLeftPinned ? stickyEdgeLeftStyle : null,
+                  isFirstRightPinned ? stickyEdgeRightStyle : null,
+                )}
+                style={{
+                  ...(width ? { width } : null),
+                  ...stickyStyle,
+                }}
               >
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </td>

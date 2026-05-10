@@ -1,5 +1,6 @@
+import type { CSSProperties } from 'react'
 import { ChevronDownIcon, ChevronsUpDownIcon, ChevronUpIcon } from 'lucide-react'
-import { flexRender, type Table } from '@tanstack/react-table'
+import { flexRender, type Header, type Table } from '@tanstack/react-table'
 
 import { cx } from '~/utils/cx'
 
@@ -8,11 +9,25 @@ import {
   headerRowStyle,
   sortIconActiveStyle,
   sortIconStyle,
+  stickyHeaderCellStyle,
+  stickyHeaderEdgeLeftStyle,
+  stickyHeaderEdgeRightStyle,
   theadStyle,
 } from '../DataTable.css'
 
 export interface TableHeaderProps<T> {
   instance: Table<T>
+}
+
+const computeStickyStyle = <T,>(
+  header: Header<T, unknown>,
+): CSSProperties | undefined => {
+  const pin = header.column.getIsPinned()
+  if (!pin) return undefined
+  if (pin === 'left') {
+    return { position: 'sticky', left: `${header.column.getStart('left')}px` }
+  }
+  return { position: 'sticky', right: `${header.column.getAfter('right')}px` }
 }
 
 export const TableHeader = <T,>({ instance }: TableHeaderProps<T>) => {
@@ -29,15 +44,23 @@ export const TableHeader = <T,>({ instance }: TableHeaderProps<T>) => {
             const align = meta?.align ?? 'start'
             const width = meta?.width ?? header.getSize()
 
+            const pin = header.column.getIsPinned()
+            const isLastLeftPinned =
+              pin === 'left' && header.column.getIsLastColumn('left')
+            const isFirstRightPinned =
+              pin === 'right' && header.column.getIsFirstColumn('right')
+            const stickyStyle = computeStickyStyle(header)
+
             return (
               <th
                 key={header.id}
-                className={headerCellRecipe({
-                  sortable,
-                  sorted,
-                  align,
-                })}
-                style={{ width }}
+                className={cx(
+                  headerCellRecipe({ sortable, sorted, align }),
+                  pin ? stickyHeaderCellStyle : null,
+                  isLastLeftPinned ? stickyHeaderEdgeLeftStyle : null,
+                  isFirstRightPinned ? stickyHeaderEdgeRightStyle : null,
+                )}
+                style={{ width, ...stickyStyle }}
                 onClick={
                   sortable
                     ? header.column.getToggleSortingHandler()

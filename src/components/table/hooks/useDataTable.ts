@@ -4,6 +4,7 @@ import {
   getCoreRowModel,
   useReactTable,
   type ColumnDef,
+  type ColumnPinningState,
   type RowData,
   type RowSelectionState,
   type SortingState,
@@ -73,6 +74,31 @@ export const useDataTable = <T,>({
     [state.selectedRowKeys],
   )
 
+  const columnPinning: ColumnPinningState = useMemo(() => {
+    const left: string[] = []
+    const right: string[] = []
+    for (const col of columns) {
+      const fixed = col.meta?.fixed
+      if (!fixed) continue
+      const id = col.id
+      if (!id) {
+        if (
+          typeof process !== 'undefined' &&
+          process.env?.NODE_ENV !== 'production'
+        ) {
+          // eslint-disable-next-line no-console
+          console.warn(
+            '[DataTable] meta.fixed requires an explicit column.id; skipping.',
+          )
+        }
+        continue
+      }
+      if (fixed === 'left') left.push(id)
+      else right.push(id)
+    }
+    return { left, right }
+  }, [columns])
+
   const pageCount = Math.max(1, Math.ceil(totalCount / state.pageSize))
 
   const table = useReactTable<T>({
@@ -81,6 +107,7 @@ export const useDataTable = <T,>({
     state: {
       sorting,
       rowSelection,
+      columnPinning,
       pagination: { pageIndex: state.page - 1, pageSize: state.pageSize },
     },
     rowCount: totalCount,

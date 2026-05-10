@@ -1363,27 +1363,27 @@ const demoColumns: ColumnDef<DemoPost>[] = [
     accessorKey: 'title',
     header: '标题',
     enableSorting: true,
-    meta: { sortable: true, width: 280 },
+    meta: { sortable: true, width: 280, fixed: 'left' },
   },
   {
     id: 'category',
     accessorKey: 'category',
     header: '分类',
     cell: ({ getValue }) => <Tag size="sm">{getValue<string>()}</Tag>,
-    meta: { width: 100 },
+    meta: { width: 120 },
   },
   {
     id: 'tags',
     accessorKey: 'tags',
     header: '标签',
-    meta: { width: 160 },
+    meta: { width: 220 },
   },
   {
     id: 'created',
     accessorKey: 'created',
     header: '创建于',
     enableSorting: true,
-    meta: { sortable: true, width: 120 },
+    meta: { sortable: true, width: 200 },
   },
   {
     id: 'status',
@@ -1397,7 +1397,22 @@ const demoColumns: ColumnDef<DemoPost>[] = [
         </span>
       )
     },
-    meta: { width: 100 },
+    meta: { width: 120 },
+  },
+  {
+    id: 'actions',
+    header: '操作',
+    cell: () => (
+      <Space gap="xs">
+        <Button intent="tertiary" size="sm" startIcon={<PencilIcon size={12} />}>
+          编辑
+        </Button>
+        <Button intent="tertiary" size="sm" startIcon={<Trash2Icon size={12} />}>
+          删除
+        </Button>
+      </Space>
+    ),
+    meta: { width: 160, align: 'end', fixed: 'right' },
   },
 ]
 

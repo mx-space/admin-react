@@ -20,21 +20,6 @@ import { TableLoading } from './parts/TableLoading'
 import { TablePagination } from './parts/TablePagination'
 import { TableSelectionCell } from './parts/TableSelectionCell'
 
-let warnedFixed = false
-const warnFixedDeferred = () => {
-  if (
-    !warnedFixed &&
-    typeof process !== 'undefined' &&
-    process.env?.NODE_ENV !== 'production'
-  ) {
-    warnedFixed = true
-    // eslint-disable-next-line no-console
-    console.warn(
-      '[DataTable] meta.fixed is reserved but not yet rendered as a sticky column (deferred to v1).',
-    )
-  }
-}
-
 export interface DataTableProps<T> {
   data: T[]
   columns: ColumnDef<T>[]
@@ -80,12 +65,6 @@ const DataTableImpl = <T,>({
       ...columns,
     ]
   }, [selectable, selectionMode, isRowSelectable, columns])
-
-  const usesFixed = useMemo(
-    () => finalColumns.some((c) => c.meta?.fixed),
-    [finalColumns],
-  )
-  if (usesFixed) warnFixedDeferred()
 
   const { table } = useDataTable<T>({
     data,

@@ -1,7 +1,9 @@
-import { style, styleVariants } from '@vanilla-extract/css'
+import { createVar, style, styleVariants } from '@vanilla-extract/css'
 import { recipe } from '@vanilla-extract/recipes'
 
 import { color, radius, spacing } from '~/styles/tokens'
+
+export const rowBgVar = createVar()
 
 export const rootStyle = style({
   display: 'flex',
@@ -14,10 +16,14 @@ export const rootStyle = style({
 
 export const scrollViewportStyle = style({
   width: '100%',
+  overflowX: 'auto',
 })
 
 export const tableStyle = style({
   width: '100%',
+  // a long fixed-column row may exceed container width; min-width: max-content
+  // lets the table grow and the scroll viewport take over horizontal scroll.
+  minWidth: 'max-content',
   // 'separate' (with zero spacing) is necessary for `position: sticky` on
   // <thead> to behave correctly across browsers; it also sidesteps the
   // sub-pixel shimmer that border-collapse causes when adjacent row
@@ -102,16 +108,28 @@ export const tbodyStyle = style({})
 export const rowRecipe = recipe({
   base: {
     transition: 'background 120ms ease',
+    // CSS var lets sticky-pinned <td> read the row's current background
+    // through `var(rowBgVar)` so they don't show through to underlying rows.
+    vars: { [rowBgVar]: color.surface1 },
     selectors: {
-      '&:hover': { background: color.surface2 },
+      '&:hover': {
+        background: color.surface2,
+        vars: { [rowBgVar]: color.surface2 },
+      },
     },
   },
   variants: {
     selected: {
       true: {
         background: 'rgba(94, 106, 210, 0.08)',
+        // opaque equivalent of rgba(94,106,210,0.08) over surface1 (#101113);
+        // sticky cells must occlude scrolling content beneath them.
+        vars: { [rowBgVar]: 'rgb(24, 25, 36)' },
         selectors: {
-          '&:hover': { background: 'rgba(94, 106, 210, 0.12)' },
+          '&:hover': {
+            background: 'rgba(94, 106, 210, 0.12)',
+            vars: { [rowBgVar]: 'rgb(27, 30, 44)' },
+          },
         },
       },
     },
@@ -150,6 +168,44 @@ export const cellRecipe = recipe({
 
 export const lastRowCellStyle = style({
   boxShadow: 'none',
+})
+
+// Sticky-pinned cells. `position: sticky` + side offsets are applied inline
+// (data-driven via getStart/getAfter); these classes layer on the visual bits
+// that vary by pin state:
+//
+// - z-index: header (3) > body (2) > unpinned cells (auto). Without this
+//   ordering, a sticky <th> would slide under a sticky <td> at scroll boundary.
+// - body cells read background from `var(rowBgVar)` so selected/hover state
+//   propagates through to the pinned cell. Header cells use surface2.
+// - edge: the rightmost left-pinned and the leftmost right-pinned cells get
+//   a soft scroll-shadow to cue the boundary; subtle when no scroll, more
+//   visible when content scrolls beneath.
+export const stickyHeaderCellStyle = style({
+  zIndex: 3,
+  background: color.surface2,
+})
+
+export const stickyBodyCellStyle = style({
+  zIndex: 2,
+  background: rowBgVar,
+})
+
+export const stickyEdgeLeftStyle = style({
+  boxShadow: `inset 0 -1px 0 ${color.surface3}, 6px 0 6px -6px rgba(0, 0, 0, 0.45)`,
+})
+
+export const stickyEdgeRightStyle = style({
+  boxShadow: `inset 0 -1px 0 ${color.surface3}, -6px 0 6px -6px rgba(0, 0, 0, 0.45)`,
+})
+
+// header variant of the same: keeps the inset bottom hairline + edge shadow.
+export const stickyHeaderEdgeLeftStyle = style({
+  boxShadow: `inset 0 -1px 0 ${color.hairline}, 6px 0 6px -6px rgba(0, 0, 0, 0.45)`,
+})
+
+export const stickyHeaderEdgeRightStyle = style({
+  boxShadow: `inset 0 -1px 0 ${color.hairline}, -6px 0 6px -6px rgba(0, 0, 0, 0.45)`,
 })
 
 export const emptyRowStyle = style({

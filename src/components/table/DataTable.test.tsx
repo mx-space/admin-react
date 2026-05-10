@@ -312,6 +312,97 @@ describe('<DataTable>', () => {
     expect(screen.getByTestId('density').textContent).toBe('roomy')
   })
 
+  it('selectable injects a left-pinned selection column with position:sticky', () => {
+    const { container } = render(<Harness selectable />)
+    // selection column is the first th in the header
+    const firstHeaderCell = container.querySelector('thead th')
+    expect(firstHeaderCell).not.toBeNull()
+    expect(
+      (firstHeaderCell as HTMLElement).style.position,
+    ).toBe('sticky')
+    expect((firstHeaderCell as HTMLElement).style.left).toBe('0px')
+    // each body row's first td is also sticky-pinned
+    const firstBodyCell = container.querySelector('tbody tr td')
+    expect(firstBodyCell).not.toBeNull()
+    expect((firstBodyCell as HTMLElement).style.position).toBe('sticky')
+    expect((firstBodyCell as HTMLElement).style.left).toBe('0px')
+  })
+
+  it('honours meta.fixed: "left" / "right" by pinning columns + computing offsets', () => {
+    const pinnedCols: ColumnDef<Row>[] = [
+      {
+        id: 'title',
+        accessorKey: 'title',
+        header: '标题',
+        meta: { fixed: 'left', width: 80 },
+      },
+      {
+        id: 'category',
+        accessorKey: 'category',
+        header: '分类',
+      },
+      {
+        id: 'actions',
+        header: '操作',
+        cell: () => <button type="button">×</button>,
+        meta: { fixed: 'right', width: 60 },
+      },
+    ]
+    function Probe() {
+      const [state, setState] = useState<TableState>(initialTableState)
+      return (
+        <DataTable
+          data={sample}
+          columns={pinnedCols}
+          totalCount={sample.length}
+          state={state}
+          setState={(u) => setState(typeof u === 'function' ? u(state) : u)}
+          rowKey={(r) => r.id}
+        />
+      )
+    }
+    const { container } = render(<Probe />)
+    const ths = container.querySelectorAll('thead th')
+    // title is left-pinned: left offset 0
+    expect((ths[0] as HTMLElement).style.position).toBe('sticky')
+    expect((ths[0] as HTMLElement).style.left).toBe('0px')
+    // category is unpinned
+    expect((ths[1] as HTMLElement).style.position).toBe('')
+    // actions is right-pinned: right offset 0
+    expect((ths[2] as HTMLElement).style.position).toBe('sticky')
+    expect((ths[2] as HTMLElement).style.right).toBe('0px')
+  })
+
+  it('skips meta.fixed without column.id (warns in dev)', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const bad: ColumnDef<Row>[] = [
+      {
+        accessorKey: 'title',
+        header: '标题',
+        // no id; meta.fixed should be ignored.
+        meta: { fixed: 'left' },
+      },
+    ]
+    function Probe() {
+      const [state, setState] = useState<TableState>(initialTableState)
+      return (
+        <DataTable
+          data={sample}
+          columns={bad}
+          totalCount={sample.length}
+          state={state}
+          setState={(u) => setState(typeof u === 'function' ? u(state) : u)}
+          rowKey={(r) => r.id}
+        />
+      )
+    }
+    const { container } = render(<Probe />)
+    expect(warn).toHaveBeenCalled()
+    const th = container.querySelector('thead th') as HTMLElement
+    expect(th.style.position).toBe('')
+    warn.mockRestore()
+  })
+
   it('functional setState is supported (last-write coherence)', () => {
     function Probe() {
       const [state, setState] = useState<TableState>(initialTableState)
