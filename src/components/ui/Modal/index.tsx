@@ -1,4 +1,4 @@
-import { Dialog as BaseDialog } from '@base-ui-components/react/dialog'
+import { Dialog as BaseDialog } from '@base-ui/react/dialog'
 import { forwardRef } from 'react'
 import type {
   ComponentPropsWithoutRef,
@@ -8,8 +8,11 @@ import type {
 
 import { cx } from '~/utils/cx'
 
+import { Scroll } from '../Scroll'
+
 import {
   backdropStyle,
+  bodyInnerStyle,
   bodyStyle,
   descriptionStyle,
   footerStyle,
@@ -129,7 +132,9 @@ const Body = ({
   ...rest
 }: HTMLAttributes<HTMLDivElement>) => (
   <div className={cx(bodyStyle, className)} {...rest}>
-    {children}
+    <Scroll>
+      <div className={bodyInnerStyle}>{children}</div>
+    </Scroll>
   </div>
 )
 

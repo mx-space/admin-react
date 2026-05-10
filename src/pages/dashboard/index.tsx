@@ -1,5 +1,12 @@
-import { Chart } from '@antv/g2'
-import { useEffect, useRef } from 'react'
+import {
+  Area,
+  AreaChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip as RechartsTooltip,
+  XAxis,
+  YAxis,
+} from 'recharts'
 
 import { Card, Button } from '~/components/ui'
 import { FullPage } from '~/layouts'
@@ -15,42 +22,56 @@ const mockSeries = [
   { date: '05-09', visits: 1284 },
 ]
 
-const useTrendChart = () => {
-  const containerRef = useRef<HTMLDivElement | null>(null)
-  useEffect(() => {
-    if (!containerRef.current) return
-    const chart = new Chart({
-      container: containerRef.current,
-      autoFit: true,
-      paddingTop: 16,
-      paddingRight: 16,
-      paddingBottom: 32,
-      paddingLeft: 40,
-    })
-    chart
-      .area()
-      .data(mockSeries)
-      .encode('x', 'date')
-      .encode('y', 'visits')
-      .scale('y', { nice: true })
-      .style('fill', 'linear-gradient(180deg, rgba(94,106,210,0.4), rgba(94,106,210,0))')
-      .style('fillOpacity', 1)
-    chart
-      .line()
-      .data(mockSeries)
-      .encode('x', 'date')
-      .encode('y', 'visits')
-      .style('stroke', '#5e6ad2')
-      .style('lineWidth', 2)
-    chart.axis('x', { line: false, tick: false })
-    chart.axis('y', { gridLineDash: [2, 2] })
-    chart.render()
-    return () => {
-      chart.destroy()
-    }
-  }, [])
-  return containerRef
-}
+const TrendChart = () => (
+  <ResponsiveContainer width="100%" height={220}>
+    <AreaChart
+      data={mockSeries}
+      margin={{ top: 16, right: 16, bottom: 8, left: 0 }}
+    >
+      <defs>
+        <linearGradient id="trendFill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#5e6ad2" stopOpacity={0.45} />
+          <stop offset="100%" stopColor="#5e6ad2" stopOpacity={0} />
+        </linearGradient>
+      </defs>
+      <CartesianGrid
+        stroke="#23262b"
+        strokeDasharray="2 2"
+        vertical={false}
+      />
+      <XAxis
+        dataKey="date"
+        tickLine={false}
+        axisLine={false}
+        tick={{ fill: '#62666d', fontSize: 11 }}
+      />
+      <YAxis
+        tickLine={false}
+        axisLine={false}
+        tick={{ fill: '#62666d', fontSize: 11 }}
+        width={36}
+      />
+      <RechartsTooltip
+        cursor={{ stroke: '#5e6ad2', strokeOpacity: 0.4 }}
+        contentStyle={{
+          background: '#171a1d',
+          border: '1px solid #2f3239',
+          borderRadius: 8,
+          color: '#f7f8f8',
+          fontSize: 12,
+        }}
+        labelStyle={{ color: '#8a8f98' }}
+      />
+      <Area
+        type="monotone"
+        dataKey="visits"
+        stroke="#5e6ad2"
+        strokeWidth={2}
+        fill="url(#trendFill)"
+      />
+    </AreaChart>
+  </ResponsiveContainer>
+)
 
 const Stat = ({
   label,
@@ -89,7 +110,6 @@ const Stat = ({
 )
 
 const DashboardPage = () => {
-  const containerRef = useTrendChart()
   const { data: appInfo, isPending } = useAppInfoQuery()
 
   return (
@@ -128,7 +148,9 @@ const DashboardPage = () => {
             mock data
           </span>
         </div>
-        <div ref={containerRef} style={{ height: 220 }} />
+        <div style={{ height: 220 }}>
+          <TrendChart />
+        </div>
       </Card>
     </FullPage>
   )

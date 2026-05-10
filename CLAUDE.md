@@ -44,7 +44,7 @@ Cross-references:
 - UI primitives: `@base-ui-components/react` (headless)
 - Styling: vanilla-extract css.ts — **no Tailwind, no UnoCSS**
 - Design system: Linear dark-canvas (lavender accent, four-step surface ladder; calibrate during P1)
-- Forms: `react-hook-form` + `zod`
+- Forms: `@tanstack/react-form` + `zod` (Standard Schema; no resolver package)
 - Animation: `motion`
 - Icons: `lucide-react`
 - Toast: `sonner`

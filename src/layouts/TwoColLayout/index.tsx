@@ -6,7 +6,7 @@ import type {
   ReactNode,
 } from 'react'
 
-import { Drawer } from '~/components/ui'
+import { Drawer, Scroll } from '~/components/ui'
 import { useViewport } from '~/hooks/useViewport'
 import { chrome } from '~/styles/tokens'
 import { cx } from '~/utils/cx'
@@ -131,7 +131,9 @@ const Root = forwardRef<HTMLDivElement, TwoColLayoutProps>(function TwoColLayout
       <div ref={ref} className={cx(rootStyle, className)} {...rest}>
         {header}
         <div className={bodyStyle}>
-          <div className={listPaneStyle}>{list}</div>
+          <div className={listPaneStyle}>
+            <Scroll>{list}</Scroll>
+          </div>
         </div>
         <Drawer.Root
           open={detailOpen}
@@ -142,7 +144,9 @@ const Root = forwardRef<HTMLDivElement, TwoColLayoutProps>(function TwoColLayout
           <Drawer.Portal>
             <Drawer.Backdrop />
             <Drawer.Content placement="right" size="full">
-              <div className={detailDrawerInnerStyle}>{detail}</div>
+              <div className={detailDrawerInnerStyle}>
+                <Scroll>{detail}</Scroll>
+              </div>
             </Drawer.Content>
           </Drawer.Portal>
         </Drawer.Root>
@@ -155,9 +159,11 @@ const Root = forwardRef<HTMLDivElement, TwoColLayoutProps>(function TwoColLayout
       {header}
       <div className={bodyStyle}>
         <div className={listPaneStyle} style={{ width: `${width}px` }}>
-          {list}
+          <Scroll>{list}</Scroll>
         </div>
-        <div className={detailPaneStyle}>{detail}</div>
+        <div className={detailPaneStyle}>
+          <Scroll>{detail}</Scroll>
+        </div>
       </div>
     </div>
   )

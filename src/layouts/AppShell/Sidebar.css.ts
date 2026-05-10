@@ -106,7 +106,11 @@ export const iconBtnStyle = style({
 export const scrollAreaStyle = style({
   flex: 1,
   minHeight: 0,
-  overflowY: 'auto',
+  display: 'flex',
+})
+
+export const scrollInnerStyle = style({
+  width: '100%',
   paddingBlock: '4px',
   paddingInline: '8px',
 })
@@ -148,7 +152,8 @@ export const itemRecipe = recipe({
   variants: {
     active: {
       true: {
-        background: themeContract.color.surface3,
+        // v1 calibration: 太亮（surface3）则突兀，宜介 surface2/3 之间
+        background: '#1a1c20',
         color: themeContract.color.ink,
       },
     },

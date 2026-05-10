@@ -5,15 +5,15 @@ export const color = {
   brandSecure: '#7a7fad',
   onPrimary: '#ffffff',
 
-  canvas: '#010102',
-  surface1: '#0f1011',
-  surface2: '#181a1c',
-  surface3: '#1f2124',
-  surface4: '#26282b',
+  canvas: '#08090b',
+  surface1: '#101113',
+  surface2: '#171a1d',
+  surface3: '#1f2226',
+  surface4: '#272b30',
 
-  hairline: '#23252a',
-  hairlineStrong: '#2f3137',
-  hairlineTertiary: '#1a1c20',
+  hairline: '#23262b',
+  hairlineStrong: '#2f3239',
+  hairlineTertiary: '#181b1f',
 
   inverseCanvas: '#ffffff',
   inverseSurface1: '#f5f5f5',

@@ -46,12 +46,16 @@ export const actionsStyle = style({
   flex: 'none',
 })
 
-export const bodyRecipe = recipe({
+export const bodyStyle = style({
+  flex: 1,
+  minHeight: 0,
+  display: 'flex',
+  background: themeContract.color.canvas,
+})
+
+export const bodyInnerRecipe = recipe({
   base: {
-    flex: 1,
-    minHeight: 0,
-    overflow: 'auto',
-    background: themeContract.color.canvas,
+    width: '100%',
   },
   variants: {
     padding: {
@@ -69,4 +73,4 @@ export const bodyRecipe = recipe({
   defaultVariants: { padding: 'default' },
 })
 
-export type BodyVariants = NonNullable<RecipeVariants<typeof bodyRecipe>>
+export type BodyVariants = NonNullable<RecipeVariants<typeof bodyInnerRecipe>>

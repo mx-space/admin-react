@@ -1,25 +1,45 @@
+import type { CSSProperties } from 'react'
+
+import { cx } from '~/utils/cx'
+
 import { spinnerStyle } from './Spinner.css'
 
 const sizeMap = {
+  xs: 10,
   sm: 12,
   md: 14,
   lg: 16,
+  xl: 20,
 } as const
 
+export type SpinnerSize = keyof typeof sizeMap
+
 export interface SpinnerProps {
-  size?: keyof typeof sizeMap
+  size?: SpinnerSize
+  className?: string
+  style?: CSSProperties
+  'aria-label'?: string
 }
 
-export const Spinner = ({ size = 'sm' }: SpinnerProps) => {
+export const Spinner = ({
+  size = 'sm',
+  className,
+  style,
+  'aria-label': ariaLabel,
+}: SpinnerProps) => {
   const px = sizeMap[size]
+  const decorative = ariaLabel === undefined
   return (
     <svg
-      className={spinnerStyle}
+      className={cx(spinnerStyle, className)}
+      style={style}
       width={px}
       height={px}
       viewBox="0 0 24 24"
       fill="none"
-      aria-hidden
+      role={decorative ? undefined : 'status'}
+      aria-hidden={decorative || undefined}
+      aria-label={ariaLabel}
     >
       <circle
         cx="12"

@@ -1,0 +1,43 @@
+export {
+  createResourceTable,
+  normalizeListResponse,
+  TOMBSTONE_TTL,
+} from './create-resource'
+export { createSingletonResource } from './create-singleton'
+export {
+  emptyResourceSlice,
+  emptySingletonSlice,
+  getResourceSlice,
+  getSingletonSlice,
+  hash,
+  invalidateAllResourceLists,
+  listResourceSliceNames,
+  markListsStale,
+  registerResourceSlice,
+  registerSingletonSlice,
+  resetDataStore,
+  updateResourceSlice,
+  updateSingletonSlice,
+  useDataStore,
+} from './store'
+export type {
+  AnyResourceState,
+  BackendPagination,
+  DataStoreState,
+  FetchOpts,
+  ListMeta,
+  OptimisticOp,
+  PaginatedResponse,
+  RelationDef,
+  ResourceConfig,
+  ResourceState,
+  ResourceTable,
+  SingletonConfig,
+  SingletonResource,
+  SingletonState,
+  SourceSeqEntry,
+  SourceTag,
+  UseEntityResult,
+  UseListResult,
+  UseSingletonResult,
+} from './types'

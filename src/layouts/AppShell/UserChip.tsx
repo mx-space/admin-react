@@ -1,8 +1,8 @@
-import { Popover as BasePopover } from '@base-ui-components/react/popover'
-import { Moon, Settings as SettingsIcon, Sun } from 'lucide-react'
+import { Popover as BasePopover } from '@base-ui/react/popover'
+import { LogOut, Moon, Settings as SettingsIcon, Sun } from 'lucide-react'
 import { useNavigate } from 'react-router'
 
-import { toast } from '~/components/ui'
+import { useLogout } from '~/hooks/useLogout'
 import { useAuthStore, useUIStore } from '~/stores'
 
 import {
@@ -33,6 +33,7 @@ export const UserChip = ({ collapsed = false }: UserChipProps) => {
   const themeMode = useUIStore((s) => s.themeMode)
   const setThemeMode = useUIStore((s) => s.setThemeMode)
   const navigate = useNavigate()
+  const logout = useLogout()
 
   const displayName = user?.name ?? user?.username ?? 'guest'
   const role = user?.username ?? '—'
@@ -86,9 +87,11 @@ export const UserChip = ({ collapsed = false }: UserChipProps) => {
             <button
               type="button"
               className={popoverItemStyle}
-              onClick={() => toast.info('logout pending P1.5')}
+              onClick={() => {
+                void logout()
+              }}
             >
-              登出
+              <LogOut size={14} /> 登出
             </button>
           </BasePopover.Popup>
         </BasePopover.Positioner>

@@ -7,4 +7,5 @@ const spin = keyframes({
 export const spinnerStyle = style({
   display: 'inline-block',
   animation: `${spin} 720ms linear infinite`,
+  color: 'currentColor',
 })

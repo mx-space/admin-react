@@ -229,3 +229,97 @@ export const iconBox = style({
   justifyContent: 'center',
   color: 'currentColor',
 })
+
+export const inlineRow = style({
+  display: 'flex',
+  alignItems: 'center',
+  gap: themeContract.spacing.sm,
+  fontSize: typography.bodySm.size,
+  color: themeContract.color.ink,
+})
+
+export const fieldLabel = style({
+  fontFamily: themeContract.fontFamily.text,
+  fontSize: typography.bodySm.size,
+  color: themeContract.color.inkMuted,
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: themeContract.spacing.sm,
+  cursor: 'pointer',
+  userSelect: 'none',
+})
+
+export const popoverList = style({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: themeContract.spacing.xs,
+  minWidth: '200px',
+})
+
+export const popoverItem = style({
+  display: 'flex',
+  alignItems: 'center',
+  gap: themeContract.spacing.xs,
+  paddingBlock: '6px',
+  paddingInline: themeContract.spacing.sm,
+  borderRadius: themeContract.radius.sm,
+  cursor: 'pointer',
+  color: themeContract.color.ink,
+  fontSize: typography.bodySm.size,
+  selectors: {
+    '&:hover': { background: themeContract.color.surface3 },
+  },
+})
+
+export const tabsBlock = style({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: themeContract.spacing.md,
+})
+
+export const tabPanelBody = style({
+  paddingBlock: themeContract.spacing.md,
+  paddingInline: themeContract.spacing.lg,
+  background: themeContract.color.surface1,
+  border: `1px solid ${themeContract.color.hairline}`,
+  borderRadius: themeContract.radius.md,
+  color: themeContract.color.inkMuted,
+  fontSize: typography.bodySm.size,
+  lineHeight: typography.bodySm.lineHeight,
+})
+
+export const stack = style({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: themeContract.spacing.sm,
+  width: '100%',
+  maxWidth: '320px',
+})
+
+export const scrollFrame = style({
+  width: '320px',
+  height: '160px',
+  border: `1px solid ${themeContract.color.hairline}`,
+  borderRadius: themeContract.radius.md,
+  background: themeContract.color.surface1,
+})
+
+export const scrollItem = style({
+  paddingBlock: themeContract.spacing.xs,
+  paddingInline: themeContract.spacing.md,
+  borderBottom: `1px solid ${themeContract.color.hairlineTertiary}`,
+  fontSize: typography.bodySm.size,
+  color: themeContract.color.inkMuted,
+})
+
+export const ellipsisFrame = style({
+  width: '160px',
+  paddingInline: themeContract.spacing.sm,
+  paddingBlock: themeContract.spacing.xxs,
+  border: `1px dashed ${themeContract.color.hairline}`,
+  borderRadius: themeContract.radius.sm,
+})
+
+export const demoCard = style({
+  overflow: 'hidden',
+})

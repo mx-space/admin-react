@@ -1,11 +1,13 @@
 import { forwardRef } from 'react'
 import type { HTMLAttributes } from 'react'
 
+import { Scroll } from '~/components/ui'
 import { cx } from '~/utils/cx'
 
 import {
   actionsStyle,
-  bodyRecipe,
+  bodyInnerRecipe,
+  bodyStyle,
   headerStyle,
   rootStyle,
   titleStyle,
@@ -66,12 +68,10 @@ const Body = forwardRef<HTMLElement, FullLayoutBodyProps>(function FullBody(
   ref,
 ) {
   return (
-    <main
-      ref={ref}
-      className={cx(bodyRecipe({ padding }), className)}
-      {...rest}
-    >
-      {children}
+    <main ref={ref} className={cx(bodyStyle, className)} {...rest}>
+      <Scroll>
+        <div className={bodyInnerRecipe({ padding })}>{children}</div>
+      </Scroll>
     </main>
   )
 })

@@ -3,6 +3,8 @@ import { ofetch } from 'ofetch'
 
 import { env } from '~/constants/env'
 
+import { fireUnauthorized } from './auth-events'
+
 export class BusinessError extends Error {
   readonly code: number
   readonly raw?: unknown
@@ -52,10 +54,17 @@ const transformResponse = <T>(input: unknown): T => {
   if (
     camelized != null &&
     typeof camelized === 'object' &&
+    !Array.isArray(camelized) &&
     'data' in (camelized as Record<string, unknown>) &&
     Array.isArray((camelized as { data: unknown }).data)
   ) {
-    return (camelized as { data: T }).data
+    const obj = camelized as Record<string, unknown>
+    const informativeSiblings = Object.keys(obj).filter(
+      (k) => k !== 'data' && obj[k] != null,
+    )
+    if (informativeSiblings.length === 0) {
+      return obj.data as T
+    }
   }
   return camelized as T
 }
@@ -84,6 +93,9 @@ export const request = ofetch.create({
     const data = response._data as
       | { code?: number; message?: string }
       | undefined
+    if (response.status === 401 || data?.code === 401) {
+      fireUnauthorized()
+    }
     if (response.status >= 500 || !data) {
       throw new SystemError(
         data?.message ?? 'Network error',

@@ -3,8 +3,9 @@ import type { ButtonHTMLAttributes, ReactNode } from 'react'
 
 import { cx } from '~/utils/cx'
 
+import { Spinner } from '../Spinner'
+
 import { buttonRecipe, type ButtonVariants } from './Button.css'
-import { Spinner } from './Spinner'
 
 type RecipeIntent = NonNullable<ButtonVariants['intent']>
 type RecipeSize = NonNullable<ButtonVariants['size']>

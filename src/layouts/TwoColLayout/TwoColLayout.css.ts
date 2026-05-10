@@ -27,14 +27,15 @@ export const bodyStyle = style({
 export const listPaneStyle = style({
   flex: 'none',
   height: '100%',
+  display: 'flex',
   borderRight: `1px solid ${themeContract.color.hairlineTertiary}`,
-  overflow: 'auto',
   background: themeContract.color.canvas,
   '@media': {
     [`(max-width: ${chrome.mobileBreakpoint - 1}px)`]: {
       width: '100%',
       height: 'auto',
       flex: 1,
+      minHeight: 0,
       borderRight: 'none',
       borderBottom: `1px solid ${themeContract.color.hairlineTertiary}`,
     },
@@ -45,14 +46,14 @@ export const detailPaneStyle = style({
   flex: 1,
   minWidth: 0,
   height: '100%',
-  overflow: 'auto',
+  display: 'flex',
   background: themeContract.color.canvas,
 })
 
 export const detailDrawerInnerStyle = style({
   flex: 1,
   minHeight: 0,
-  overflow: 'auto',
+  display: 'flex',
   background: themeContract.color.canvas,
   color: themeContract.color.ink,
 })

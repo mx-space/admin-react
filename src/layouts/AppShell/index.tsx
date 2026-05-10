@@ -4,6 +4,9 @@ import { useEffect } from 'react'
 import { Outlet } from 'react-router'
 
 import { Drawer } from '~/components/ui'
+import { AuthErrorBridge } from '~/components/shared/AuthErrorBridge'
+import { SocketBridge } from '~/components/shared/SocketBridge'
+import { KbarProvider } from '~/components/kbar/KbarProvider'
 import { useViewport } from '~/hooks/useViewport'
 import { sidebarMobileOpenAtom } from '~/atoms/sidebar'
 import { useUIStore } from '~/stores'
@@ -48,6 +51,9 @@ export const AppShell = () => {
   if (isMobile) {
     return (
       <div className={rootRecipe({ sidebar: 'mobile' })}>
+        <AuthErrorBridge />
+        <SocketBridge />
+        <KbarProvider />
         <div className={mainStyle}>
           <header className={mobileHeaderStyle}>
             <button
@@ -78,6 +84,9 @@ export const AppShell = () => {
 
   return (
     <div className={rootRecipe({ sidebar: collapsed ? 'collapsed' : 'expanded' })}>
+      <AuthErrorBridge />
+      <SocketBridge />
+      <KbarProvider />
       <Sidebar collapsed={collapsed} />
       <div className={mainStyle}>
         <Outlet />

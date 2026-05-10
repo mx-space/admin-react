@@ -1,6 +1,7 @@
 import { Edit3, Search } from 'lucide-react'
 
-import { toast } from '~/components/ui'
+import { Scroll, toast } from '~/components/ui'
+import { useKbar } from '~/hooks/useKbar'
 import { cx } from '~/utils/cx'
 
 import {
@@ -11,6 +12,7 @@ import {
   orgChipStyle,
   orgNameStyle,
   scrollAreaStyle,
+  scrollInnerStyle,
   sidebarRecipe,
   topRowStyle,
 } from './Sidebar.css'
@@ -30,6 +32,7 @@ export const Sidebar = ({
   className,
 }: SidebarProps) => {
   const showLabels = !collapsed || mobile
+  const { open: openKbar } = useKbar()
   return (
     <aside
       className={cx(
@@ -47,8 +50,8 @@ export const Sidebar = ({
             <button
               type="button"
               className={iconBtnStyle}
-              aria-label="Search"
-              onClick={() => toast.info('kbar 待 spec 10')}
+              aria-label="Search (⌘K)"
+              onClick={openKbar}
             >
               <Search size={14} />
             </button>
@@ -65,28 +68,32 @@ export const Sidebar = ({
       </div>
 
       <nav className={scrollAreaStyle}>
-        {navItems.map((node, idx) =>
-          node.kind === 'item' ? (
-            <SidebarItem
-              key={(node as NavItemLeaf).to}
-              item={node}
-              collapsed={collapsed && !mobile}
-            />
-          ) : (
-            <div key={`group-${idx}-${(node as NavGroup).label}`} className={groupStyle}>
-              {showLabels && (
-                <div className={groupHeaderStyle}>{(node as NavGroup).label}</div>
-              )}
-              {(node as NavGroup).children.map((child) => (
+        <Scroll>
+          <div className={scrollInnerStyle}>
+            {navItems.map((node, idx) =>
+              node.kind === 'item' ? (
                 <SidebarItem
-                  key={child.to}
-                  item={child}
+                  key={(node as NavItemLeaf).to}
+                  item={node}
                   collapsed={collapsed && !mobile}
                 />
-              ))}
-            </div>
-          ),
-        )}
+              ) : (
+                <div key={`group-${idx}-${(node as NavGroup).label}`} className={groupStyle}>
+                  {showLabels && (
+                    <div className={groupHeaderStyle}>{(node as NavGroup).label}</div>
+                  )}
+                  {(node as NavGroup).children.map((child) => (
+                    <SidebarItem
+                      key={child.to}
+                      item={child}
+                      collapsed={collapsed && !mobile}
+                    />
+                  ))}
+                </div>
+              ),
+            )}
+          </div>
+        </Scroll>
       </nav>
 
       <UserChip collapsed={collapsed && !mobile} />

@@ -107,10 +107,14 @@ export const descriptionStyle = style({
 })
 
 export const bodyStyle = style({
-  padding: `0 ${themeContract.spacing.lg}`,
-  overflowY: 'auto',
   flex: 1,
   minHeight: 0,
+  display: 'flex',
+})
+
+export const bodyInnerStyle = style({
+  width: '100%',
+  paddingInline: themeContract.spacing.lg,
 })
 
 export const footerStyle = style({

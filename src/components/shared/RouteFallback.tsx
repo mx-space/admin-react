@@ -1,4 +1,4 @@
-import { Spinner } from '~/components/ui/Button/Spinner'
+import { Spinner } from '~/components/ui/Spinner'
 
 import { fallbackStyle } from './RouteFallback.css'
 

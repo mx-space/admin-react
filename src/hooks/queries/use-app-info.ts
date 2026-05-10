@@ -1,12 +1,3 @@
-import { useQuery } from '@tanstack/react-query'
+import { appInfo } from '~/stores/data/resources/app-info'
 
-import { systemApi } from '~/api/system'
-
-import { queryKeys } from './keys'
-
-export const useAppInfoQuery = () =>
-  useQuery({
-    queryKey: queryKeys.system.appInfo(),
-    queryFn: () => systemApi.appInfo(),
-    staleTime: 5 * 60_000,
-  })
+export const useAppInfoQuery = appInfo.use
