@@ -28,6 +28,7 @@ export const listPaneStyle = style({
   flex: 'none',
   height: '100%',
   display: 'flex',
+  flexDirection: 'column',
   borderRight: `1px solid ${themeContract.color.hairlineTertiary}`,
   background: themeContract.color.canvas,
   '@media': {
@@ -40,6 +41,10 @@ export const listPaneStyle = style({
       borderBottom: `1px solid ${themeContract.color.hairlineTertiary}`,
     },
   },
+})
+
+export const listHeaderSlotStyle = style({
+  flexShrink: 0,
 })
 
 export const detailPaneStyle = style({
@@ -56,4 +61,12 @@ export const detailDrawerInnerStyle = style({
   display: 'flex',
   background: themeContract.color.canvas,
   color: themeContract.color.ink,
+})
+
+export const slotFillStyle = style({
+  flex: 1,
+  minWidth: 0,
+  minHeight: 0,
+  display: 'flex',
+  flexDirection: 'column',
 })

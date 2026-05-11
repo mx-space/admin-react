@@ -14,6 +14,8 @@ const LoginPage = lazy(() => import('~/pages/login'))
 const SetupPage = lazy(() => import('~/pages/setup'))
 const SetupApiPage = lazy(() => import('~/pages/setup-api'))
 const DashboardPage = lazy(() => import('~/pages/dashboard'))
+const PostsViewPage = lazy(() => import('~/pages/posts/view'))
+const PostsEditPage = lazy(() => import('~/pages/posts/edit'))
 
 const NotFoundPage = () => (
   <main style={{ padding: 32 }}>
@@ -43,6 +45,8 @@ export const AppRoutes = () => (
         <Route element={<AppShell />}>
           <Route index element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/posts/view" element={<PostsViewPage />} />
+          <Route path="/posts/edit" element={<PostsEditPage />} />
         </Route>
       </Route>
 

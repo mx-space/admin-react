@@ -10,7 +10,19 @@ export { radius } from './radius'
 export type { RadiusToken } from './radius'
 export { spacing } from './spacing'
 export type { SpacingToken } from './spacing'
-export { fontFamily, typography } from './typography'
-export type { FontFamilyToken, TypographyToken } from './typography'
+export {
+  fontFamily,
+  fontSize,
+  fontWeight,
+  iconSize,
+  typography,
+} from './typography'
+export type {
+  FontFamilyToken,
+  FontSizeToken,
+  FontWeightToken,
+  IconSizeToken,
+  TypographyToken,
+} from './typography'
 export { zIndex } from './zIndex'
 export type { ZIndexToken } from './zIndex'

@@ -1,10 +1,11 @@
 import { Popover as BasePopover } from '@base-ui/react/popover'
-import { forwardRef } from 'react'
+import { forwardRef, useId } from 'react'
 import type {
   ComponentPropsWithoutRef,
   ComponentPropsWithRef,
 } from 'react'
 
+import { ShortcutScope } from '~/lib/keymap'
 import { cx } from '~/utils/cx'
 
 import {
@@ -82,15 +83,20 @@ export interface PopoverPopupProps extends PopupBaseProps {
 }
 
 const Popup = forwardRef<HTMLDivElement, PopoverPopupProps>(function Popup(
-  { padding = 'sm', width = 'auto', className, ...rest },
+  { padding = 'sm', width = 'auto', className, children, ...rest },
   ref,
 ) {
+  const scopeId = useId()
   return (
     <BasePopover.Popup
       ref={ref}
       className={cx(popupRecipe({ padding, width }), className)}
       {...rest}
-    />
+    >
+      <ShortcutScope id={`popover:${scopeId}`} kind="overlay">
+        {children}
+      </ShortcutScope>
+    </BasePopover.Popup>
   )
 })
 

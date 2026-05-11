@@ -34,6 +34,7 @@ export const FullPage = ({
 export interface TwoColPageProps {
   title?: ReactNode
   actions?: ReactNode
+  listHeader?: ReactNode
   list?: ReactNode
   listWidth?: TwoColLayoutProps['listWidth']
   selectedId?: TwoColLayoutProps['selectedId']
@@ -45,6 +46,7 @@ export interface TwoColPageProps {
 export const TwoColPage = ({
   title,
   actions,
+  listHeader,
   list,
   listWidth,
   selectedId,
@@ -67,6 +69,9 @@ export const TwoColPage = ({
           <TwoColLayout.Actions>{actions}</TwoColLayout.Actions>
         )}
       </TwoColLayout.Header>
+    )}
+    {listHeader !== undefined && (
+      <TwoColLayout.ListHeader>{listHeader}</TwoColLayout.ListHeader>
     )}
     {list !== undefined && <TwoColLayout.List>{list}</TwoColLayout.List>}
     {children !== undefined && (

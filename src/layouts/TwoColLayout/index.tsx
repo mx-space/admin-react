@@ -20,12 +20,14 @@ import {
   bodyStyle,
   detailDrawerInnerStyle,
   detailPaneStyle,
+  listHeaderSlotStyle,
   listPaneStyle,
   rootStyle,
+  slotFillStyle,
 } from './TwoColLayout.css'
 
 const SLOT_KEY = '__two-col-slot'
-type Slot = 'header' | 'list' | 'detail'
+type Slot = 'header' | 'list-header' | 'list' | 'detail'
 
 const tagSlot = <P extends object>(Comp: ComponentType<P>, slot: Slot) => {
   ;(Comp as unknown as Record<string, string>)[SLOT_KEY] = slot
@@ -77,12 +79,22 @@ const ActionsImpl = ({
   </div>
 )
 
+const ListHeaderImpl = ({
+  className,
+  children,
+  ...rest
+}: HTMLAttributes<HTMLDivElement>) => (
+  <div className={cx(listHeaderSlotStyle, className)} {...rest}>
+    {children}
+  </div>
+)
+
 const ListImpl = ({
   className,
   children,
   ...rest
 }: HTMLAttributes<HTMLDivElement>) => (
-  <div className={className} {...rest}>
+  <div className={cx(slotFillStyle, className)} {...rest}>
     {children}
   </div>
 )
@@ -92,12 +104,13 @@ const DetailImpl = ({
   children,
   ...rest
 }: HTMLAttributes<HTMLDivElement>) => (
-  <div className={className} {...rest}>
+  <div className={cx(slotFillStyle, className)} {...rest}>
     {children}
   </div>
 )
 
 const Header = tagSlot(HeaderImpl, 'header')
+const ListHeader = tagSlot(ListHeaderImpl, 'list-header')
 const List = tagSlot(ListImpl, 'list')
 const Detail = tagSlot(DetailImpl, 'detail')
 
@@ -120,6 +133,7 @@ const Root = forwardRef<HTMLDivElement, TwoColLayoutProps>(function TwoColLayout
 ) {
   const { isMobile } = useViewport()
   const header = findSlot(children, 'header')
+  const listHeader = findSlot(children, 'list-header')
   const list = findSlot(children, 'list')
   const detail = findSlot(children, 'detail')
 
@@ -132,6 +146,7 @@ const Root = forwardRef<HTMLDivElement, TwoColLayoutProps>(function TwoColLayout
         {header}
         <div className={bodyStyle}>
           <div className={listPaneStyle}>
+            {listHeader}
             <Scroll>{list}</Scroll>
           </div>
         </div>
@@ -144,9 +159,7 @@ const Root = forwardRef<HTMLDivElement, TwoColLayoutProps>(function TwoColLayout
           <Drawer.Portal>
             <Drawer.Backdrop />
             <Drawer.Content placement="right" size="full">
-              <div className={detailDrawerInnerStyle}>
-                <Scroll>{detail}</Scroll>
-              </div>
+              <div className={detailDrawerInnerStyle}>{detail}</div>
             </Drawer.Content>
           </Drawer.Portal>
         </Drawer.Root>
@@ -159,11 +172,10 @@ const Root = forwardRef<HTMLDivElement, TwoColLayoutProps>(function TwoColLayout
       {header}
       <div className={bodyStyle}>
         <div className={listPaneStyle} style={{ width: `${width}px` }}>
+          {listHeader}
           <Scroll>{list}</Scroll>
         </div>
-        <div className={detailPaneStyle}>
-          <Scroll>{detail}</Scroll>
-        </div>
+        <div className={detailPaneStyle}>{detail}</div>
       </div>
     </div>
   )
@@ -173,6 +185,7 @@ type TwoColCompound = typeof Root & {
   Header: typeof Header
   Title: typeof TitleImpl
   Actions: typeof ActionsImpl
+  ListHeader: typeof ListHeader
   List: typeof List
   Detail: typeof Detail
 }
@@ -181,5 +194,6 @@ export const TwoColLayout = Root as TwoColCompound
 TwoColLayout.Header = Header
 TwoColLayout.Title = TitleImpl
 TwoColLayout.Actions = ActionsImpl
+TwoColLayout.ListHeader = ListHeader
 TwoColLayout.List = List
 TwoColLayout.Detail = Detail

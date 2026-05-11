@@ -25,6 +25,7 @@ import {
   Button,
   Card,
   Checkbox,
+  Combobox,
   Ellipsis,
   Empty,
   Input,
@@ -1439,6 +1440,181 @@ const DataTableSection = () => {
   )
 }
 
+const categoryItems = [
+  { label: '技术', value: 'tech' },
+  { label: '日志', value: 'log' },
+  { label: '设计', value: 'design' },
+  { label: '随笔', value: 'essay' },
+]
+
+const tagSuggestions = ['react', 'hooks', 'design', 'tokens', 'editor', 'lexical']
+
+const ComboboxSection = () => {
+  const [category, setCategory] = useState<string | null>(null)
+  const [tags, setTags] = useState<string[]>(['react'])
+  const [tagInput, setTagInput] = useState('')
+
+  const [freeTags, setFreeTags] = useState<string[]>([])
+  const [freeInput, setFreeInput] = useState('')
+
+  const acceptFreeEntry = () => {
+    const next = freeInput.trim()
+    if (!next) return
+    if (freeTags.includes(next)) return
+    setFreeTags((prev) => [...prev, next])
+    setFreeInput('')
+  }
+
+  return (
+    <Section
+      eyebrow="26 · combobox"
+      title="Single · multi · freeSolo"
+      lede="Wraps `@base-ui/react/combobox`. Compose `Trigger` (renders InputGroup) with `Input` for single-select, or with `Chips` + `Chip` + `Input` + `Clear` for multi-select. freeSolo is a usage pattern: handle Enter on the input to push the typed value into your `value` array."
+      delay={1260}
+    >
+      <div className={s.cluster}>
+        <span className={s.subEyebrow}>single · category</span>
+        <div className={s.labelStack}>
+          <span className={s.inlineLabel}>filter, indicator, single value</span>
+          <Combobox.Root<{ label: string; value: string }>
+            items={categoryItems}
+            value={categoryItems.find((it) => it.value === category) ?? null}
+            onValueChange={(v) => setCategory(v?.value ?? null)}
+          >
+            <Combobox.Trigger size="md">
+              <Combobox.Input placeholder="选个分类" />
+              <Combobox.Clear />
+              <Combobox.Icon />
+            </Combobox.Trigger>
+            <Combobox.Portal>
+              <Combobox.Positioner>
+                <Combobox.Popup>
+                  <Combobox.List>
+                    {categoryItems.map((it) => (
+                      <Combobox.Item key={it.value} value={it}>
+                        {it.label}
+                        <Combobox.ItemIndicator />
+                      </Combobox.Item>
+                    ))}
+                  </Combobox.List>
+                  <Combobox.Empty>无匹配分类</Combobox.Empty>
+                </Combobox.Popup>
+              </Combobox.Positioner>
+            </Combobox.Portal>
+          </Combobox.Root>
+        </div>
+      </div>
+
+      <div className={s.cluster}>
+        <span className={s.subEyebrow}>multi · chips · suggestions</span>
+        <div className={s.labelStack}>
+          <span className={s.inlineLabel}>multiple, chip remove, clear</span>
+          <Combobox.Root<string, true>
+            multiple
+            items={tagSuggestions}
+            value={tags}
+            onValueChange={(v) => setTags(v)}
+            inputValue={tagInput}
+            onInputValueChange={(v) => setTagInput(v)}
+          >
+            <Combobox.Trigger size="md">
+              <Combobox.Chips>
+                {tags.map((tag, index) => (
+                  <Combobox.Chip key={tag} aria-label={tag}>
+                    {tag}
+                    <Combobox.ChipRemove
+                      aria-label={`remove ${tag}`}
+                      onClick={(event) => {
+                        event.preventDefault()
+                        setTags((prev) => prev.filter((_, i) => i !== index))
+                      }}
+                    />
+                  </Combobox.Chip>
+                ))}
+                <Combobox.Input placeholder={tags.length ? '' : '加几个标签'} />
+              </Combobox.Chips>
+              <Combobox.Clear />
+            </Combobox.Trigger>
+            <Combobox.Portal>
+              <Combobox.Positioner>
+                <Combobox.Popup>
+                  <Combobox.List>
+                    {tagSuggestions.map((it) => (
+                      <Combobox.Item key={it} value={it}>
+                        {it}
+                        <Combobox.ItemIndicator />
+                      </Combobox.Item>
+                    ))}
+                  </Combobox.List>
+                  <Combobox.Empty>无匹配标签</Combobox.Empty>
+                </Combobox.Popup>
+              </Combobox.Positioner>
+            </Combobox.Portal>
+          </Combobox.Root>
+        </div>
+      </div>
+
+      <div className={s.cluster}>
+        <span className={s.subEyebrow}>multi · freeSolo</span>
+        <div className={s.labelStack}>
+          <span className={s.inlineLabel}>type & Enter to add a new tag</span>
+          <Combobox.Root<string, true>
+            multiple
+            items={tagSuggestions}
+            value={freeTags}
+            onValueChange={(v) => setFreeTags(v)}
+            inputValue={freeInput}
+            onInputValueChange={(v) => setFreeInput(v)}
+          >
+            <Combobox.Trigger size="md">
+              <Combobox.Chips>
+                {freeTags.map((tag, index) => (
+                  <Combobox.Chip key={tag} aria-label={tag}>
+                    {tag}
+                    <Combobox.ChipRemove
+                      aria-label={`remove ${tag}`}
+                      onClick={(event) => {
+                        event.preventDefault()
+                        setFreeTags((prev) => prev.filter((_, i) => i !== index))
+                      }}
+                    />
+                  </Combobox.Chip>
+                ))}
+                <Combobox.Input
+                  placeholder={freeTags.length ? '' : '回车即添新'}
+                  onKeyDown={(event) => {
+                    if (event.key !== 'Enter') return
+                    if (tagSuggestions.includes(freeInput.trim())) return
+                    if (!freeInput.trim()) return
+                    event.preventDefault()
+                    acceptFreeEntry()
+                  }}
+                />
+              </Combobox.Chips>
+              <Combobox.Clear />
+            </Combobox.Trigger>
+            <Combobox.Portal>
+              <Combobox.Positioner>
+                <Combobox.Popup>
+                  <Combobox.List>
+                    {tagSuggestions.map((it) => (
+                      <Combobox.Item key={it} value={it}>
+                        {it}
+                        <Combobox.ItemIndicator />
+                      </Combobox.Item>
+                    ))}
+                  </Combobox.List>
+                  <Combobox.Empty>回车以添「{freeInput}」</Combobox.Empty>
+                </Combobox.Popup>
+              </Combobox.Positioner>
+            </Combobox.Portal>
+          </Combobox.Root>
+        </div>
+      </div>
+    </Section>
+  )
+}
+
 const ToastSection = () => (
   <Section
     eyebrow="05 · toast"
@@ -1520,6 +1696,7 @@ export const PrimitivesPage = () => (
       <PaginationSection />
       <FormSystemSection />
       <DataTableSection />
+      <ComboboxSection />
       <ToastSection />
     </div>
   </div>

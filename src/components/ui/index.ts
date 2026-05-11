@@ -3,6 +3,17 @@ export { Badge, type BadgeProps } from './Badge'
 export { Button, type ButtonProps } from './Button'
 export { Card, type CardProps } from './Card'
 export { Checkbox, type CheckboxProps } from './Checkbox'
+export {
+  ColumnHeader,
+  type ColumnHeaderIconButtonProps,
+  type ColumnHeaderProps,
+  type ColumnHeaderSize,
+} from './ColumnHeader'
+export {
+  Combobox,
+  type ComboboxRootProps,
+  type ComboboxTriggerProps,
+} from './Combobox'
 export { Drawer, type DrawerContentProps, type DrawerRootProps } from './Drawer'
 export { Ellipsis, type EllipsisProps } from './Ellipsis'
 export { Empty, type EmptyProps } from './Empty'

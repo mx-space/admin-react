@@ -1,9 +1,10 @@
 import { useSetAtom } from 'jotai'
-import { useEffect, useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router'
 
 import { kbarOpenAtom } from '~/atoms/kbar'
 import { useKbarRegister } from '~/hooks/useKbarRegister'
+import { useShortcut } from '~/hooks/useShortcut'
 import { navItems } from '~/layouts/AppShell/navItems'
 
 import { CommandPalette } from './CommandPalette'
@@ -46,17 +47,12 @@ export const KbarProvider = () => {
   const navActions = useNavActions()
   useKbarRegister(navActions)
 
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      // ⌘K / Ctrl+K 全局热键：编辑态亦可触发，俾随处召唤面板
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
-        e.preventDefault()
-        setOpen((v) => !v)
-      }
-    }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [setOpen])
+  const toggle = useCallback(() => setOpen((v) => !v), [setOpen])
+  useShortcut('$mod+K', toggle, {
+    scope: 'global',
+    passthrough: true,
+    description: '命令面板',
+  })
 
   return <CommandPalette />
 }

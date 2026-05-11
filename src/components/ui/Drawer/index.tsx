@@ -1,10 +1,11 @@
 import { Dialog as BaseDialog } from '@base-ui/react/dialog'
-import { forwardRef } from 'react'
+import { forwardRef, useId } from 'react'
 import type {
   ComponentPropsWithoutRef,
   ComponentPropsWithRef,
 } from 'react'
 
+import { ShortcutScope } from '~/lib/keymap'
 import { cx } from '~/utils/cx'
 
 import {
@@ -59,15 +60,20 @@ export interface DrawerContentProps extends PopupBaseProps {
 }
 
 const Content = forwardRef<HTMLDivElement, DrawerContentProps>(function Content(
-  { placement = 'right', size = 'md', className, ...rest },
+  { placement = 'right', size = 'md', className, children, ...rest },
   ref,
 ) {
+  const scopeId = useId()
   return (
     <BaseDialog.Popup
       ref={ref}
       className={cx(popupRecipe({ placement, size }), className)}
       {...rest}
-    />
+    >
+      <ShortcutScope id={`drawer:${scopeId}`} kind="overlay">
+        {children}
+      </ShortcutScope>
+    </BaseDialog.Popup>
   )
 })
 

@@ -1,7 +1,11 @@
+import { getDefaultStore } from 'jotai'
 import { useCallback, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router'
 import { toast } from 'sonner'
 
+import { postDraftDirtyMapAtom } from '~/atoms/draft'
+import { postsListCursorAtom } from '~/atoms/posts'
+import { postDetailQueryKey } from '~/hooks/queries/usePosts'
 import { useLogout } from '~/hooks/useLogout'
 import { useSocketEvent } from '~/hooks/useSocketEvent'
 import { queryClient } from '~/lib/query-client'
@@ -11,6 +15,8 @@ import {
   type AdminNotificationKind,
   type AdminNotificationPayload,
   type CommentCreatePayload,
+  type EntityIdPayload,
+  type EntityUpdatePayload,
   type LinkApplyPayload,
 } from '~/lib/socket-events'
 import { invalidateAllResourceLists } from '~/stores/data/store'
@@ -70,7 +76,34 @@ export const SocketBridge = () => {
     [navigate],
   )
 
-  const onPostsChanged = useCallback(() => {
+  const onPostsChanged = useCallback((payload: EntityUpdatePayload) => {
+    const store = getDefaultStore()
+    const cursor = store.get(postsListCursorAtom)
+    const dirtyMap = store.get(postDraftDirtyMapAtom)
+    if (payload?.id && payload.id === cursor && dirtyMap[payload.id]) {
+      // per spec §6.9 — preserve draft view when server post changes
+      invalidateAllResourceLists()
+      void queryClient.invalidateQueries({ queryKey: ['data'] })
+      return
+    }
+    refreshAllResourceData()
+  }, [])
+
+  const onPostCreate = useCallback(() => {
+    refreshAllResourceData()
+  }, [])
+
+  const onPostDelete = useCallback((payload: EntityIdPayload) => {
+    const store = getDefaultStore()
+    const cursor = store.get(postsListCursorAtom)
+    if (payload?.id && payload.id === cursor) {
+      store.set(postsListCursorAtom, null)
+      void queryClient.invalidateQueries({ queryKey: postDetailQueryKey(payload.id) })
+      invalidateAllResourceLists()
+      void queryClient.invalidateQueries({ queryKey: ['data'] })
+      toast.warning('文章已被删除')
+      return
+    }
     refreshAllResourceData()
   }, [])
 
@@ -121,9 +154,9 @@ export const SocketBridge = () => {
   }, [])
 
   useSocketEvent(SocketEvent.COMMENT_CREATE, onCommentCreate)
-  useSocketEvent(SocketEvent.POST_CREATE, onPostsChanged)
+  useSocketEvent(SocketEvent.POST_CREATE, onPostCreate)
   useSocketEvent(SocketEvent.POST_UPDATE, onPostsChanged)
-  useSocketEvent(SocketEvent.POST_DELETE, onPostsChanged)
+  useSocketEvent(SocketEvent.POST_DELETE, onPostDelete)
   useSocketEvent(SocketEvent.NOTE_CREATE, onNotesChanged)
   useSocketEvent(SocketEvent.NOTE_UPDATE, onNotesChanged)
   useSocketEvent(SocketEvent.NOTE_DELETE, onNotesChanged)

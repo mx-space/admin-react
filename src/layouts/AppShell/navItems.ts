@@ -1,4 +1,4 @@
-import { LayoutDashboard } from 'lucide-react'
+import { FileText, LayoutDashboard } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
 export type NavItemLeaf = {
@@ -19,7 +19,7 @@ export type NavGroup = {
 export type NavNode = NavItemLeaf | NavGroup
 export type NavTree = NavNode[]
 
-// P1 ships only Dashboard. Items are added per business iteration in P3.
 export const navItems: NavTree = [
   { kind: 'item', to: '/dashboard', label: '仪表盘', icon: LayoutDashboard },
+  { kind: 'item', to: '/posts/view', label: '文章', icon: FileText },
 ]

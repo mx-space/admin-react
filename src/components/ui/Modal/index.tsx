@@ -1,11 +1,12 @@
 import { Dialog as BaseDialog } from '@base-ui/react/dialog'
-import { forwardRef } from 'react'
+import { forwardRef, useId } from 'react'
 import type {
   ComponentPropsWithoutRef,
   ComponentPropsWithRef,
   HTMLAttributes,
 } from 'react'
 
+import { ShortcutScope } from '~/lib/keymap'
 import { cx } from '~/utils/cx'
 
 import { Scroll } from '../Scroll'
@@ -72,15 +73,20 @@ export interface ModalContentProps extends PopupBaseProps {
 }
 
 const Content = forwardRef<HTMLDivElement, ModalContentProps>(function Content(
-  { size = 'md', className, ...rest },
+  { size = 'md', className, children, ...rest },
   ref,
 ) {
+  const scopeId = useId()
   return (
     <BaseDialog.Popup
       ref={ref}
       className={cx(popupRecipe({ size }), className)}
       {...rest}
-    />
+    >
+      <ShortcutScope id={`modal:${scopeId}`} kind="overlay">
+        {children}
+      </ShortcutScope>
+    </BaseDialog.Popup>
   )
 })
 

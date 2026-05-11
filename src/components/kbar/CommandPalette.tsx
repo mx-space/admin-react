@@ -14,6 +14,7 @@ import {
 import { kbarActionsAtom, kbarOpenAtom } from '~/atoms/kbar'
 
 import { Scroll } from '~/components/ui'
+import { ShortcutScope } from '~/lib/keymap'
 
 import {
   backdropStyle,
@@ -158,6 +159,7 @@ export const CommandPalette = () => {
       <BaseDialog.Portal>
         <BaseDialog.Backdrop className={backdropStyle} />
         <BaseDialog.Popup className={popupStyle} onKeyDown={onKeyDown}>
+          <ShortcutScope id="kbar" kind="overlay">
           <BaseDialog.Title style={{ display: 'none' }}>
             命令面板
           </BaseDialog.Title>
@@ -235,6 +237,7 @@ export const CommandPalette = () => {
               </Scroll>
             </div>
           )}
+          </ShortcutScope>
         </BaseDialog.Popup>
       </BaseDialog.Portal>
     </BaseDialog.Root>

@@ -2,6 +2,7 @@ import path from 'node:path'
 
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin'
 import react from '@vitejs/plugin-react'
+import { codeInspectorPlugin } from 'code-inspector-plugin'
 import { defineConfig } from 'vite'
 import checker from 'vite-plugin-checker'
 
@@ -13,7 +14,12 @@ export default defineConfig({
       path: 'path-browserify',
     },
   },
-  plugins: [react(), vanillaExtractPlugin(), checker({ typescript: true })],
+  plugins: [
+    codeInspectorPlugin({ bundler: 'vite' }),
+    react(),
+    vanillaExtractPlugin(),
+    checker({ typescript: true }),
+  ],
   server: {
     port: 9528,
   },
