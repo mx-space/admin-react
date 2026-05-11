@@ -41,7 +41,7 @@ export const PostHeader = ({
   onOpenDiff,
   externalUrl,
 }: PostHeaderProps) => {
-  const iconSize = variant === 'compact' ? 'sm' : 'md'
+  const iconSize = 'sm'
   const isFull = variant === 'full'
   const title = post?.title ?? ''
   const publishDisabled = dirtyFieldCount === 0

@@ -19,6 +19,10 @@ const colorGroups = [
     keys: ['canvas', 'surface1', 'surface2', 'surface3', 'surface4'],
   },
   {
+    label: 'sidebar chrome',
+    keys: ['bgSidebar', 'bgSidebarRow', 'bgSidebarChip', 'sidebarTreeLine'],
+  },
+  {
     label: 'hairlines',
     keys: ['hairline', 'hairlineStrong', 'hairlineTertiary'],
   },
@@ -27,8 +31,17 @@ const colorGroups = [
     keys: ['ink', 'inkMuted', 'inkSubtle', 'inkTertiary'],
   },
   {
-    label: 'semantic',
+    label: 'status · fg',
     keys: ['semanticSuccess', 'semanticDanger', 'semanticWarning', 'semanticInfo'],
+  },
+  {
+    label: 'status · tinted bg',
+    keys: [
+      'semanticSuccessBg',
+      'semanticDangerBg',
+      'semanticWarningBg',
+      'semanticInfoBg',
+    ],
   },
   {
     label: 'inverse',

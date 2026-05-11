@@ -34,11 +34,11 @@ import {
   skeletonStyle,
   stateStyle,
 } from './RightPane.css'
+import { RecoveryBanner } from './banners/RecoveryBanner'
 import { BodyEditor } from './body/BodyEditor'
 import { MetaStrip } from './meta/MetaStrip'
 import { TitleField } from './meta/TitleField'
 import { DiscardConfirmModal } from './modals/DiscardConfirmModal'
-import { RecoveryModal } from './modals/RecoveryModal'
 import { CategoryField } from './props/fields/CategoryField'
 import { CopyrightField } from './props/fields/CopyrightField'
 import { PinField } from './props/fields/PinField'
@@ -96,7 +96,7 @@ const RightPaneInner = ({ cursor }: { cursor: string }) => {
   }
 
   const recoveryShown = useRef<Set<string>>(new Set())
-  const [recoveryOpen, setRecoveryOpen] = useState(false)
+  const [recoveryVisible, setRecoveryVisible] = useState(false)
   const [discardOpen, setDiscardOpen] = useState(false)
   const [deleteOpen, setDeleteOpen] = useState(false)
   const [deleteConfirmText, setDeleteConfirmText] = useState('')
@@ -105,7 +105,7 @@ const RightPaneInner = ({ cursor }: { cursor: string }) => {
     if (!post || !draft) return
     if (recoveryShown.current.has(cursor)) return
     recoveryShown.current.add(cursor)
-    setRecoveryOpen(true)
+    setRecoveryVisible(true)
   }, [cursor, post, draft])
 
   // flush draft when post changes — see spec §6.8
@@ -191,7 +191,7 @@ const RightPaneInner = ({ cursor }: { cursor: string }) => {
       {
         onSuccess: () => {
           toast.success('已提交')
-          setRecoveryOpen(false)
+          setRecoveryVisible(false)
         },
         onError: (err: Error) => toast.error(err.message ?? '提交失败'),
       },
@@ -265,6 +265,25 @@ const RightPaneInner = ({ cursor }: { cursor: string }) => {
       <div className={scrollWrapStyle}>
         <Scroll>
           <div className={bodyStyle}>
+          {recoveryVisible && draft ? (
+            <RecoveryBanner
+              lastEditedAt={draft.updatedAt ?? null}
+              onUseDraft={() => setRecoveryVisible(false)}
+              onUsePublished={() => {
+                if (draft.id) {
+                  discard.mutate(
+                    { draftId: draft.id },
+                    {
+                      onSuccess: () => toast.success('已切回已发布'),
+                      onError: (err: Error) =>
+                        toast.error(err.message ?? '操作失败'),
+                    },
+                  )
+                }
+                setRecoveryVisible(false)
+              }}
+            />
+          ) : null}
           <TitleField value={effective.title} onCommit={commitTitle} />
           <MetaStrip
             post={post}
@@ -313,25 +332,6 @@ const RightPaneInner = ({ cursor }: { cursor: string }) => {
         </div>
         </Scroll>
       </div>
-      <RecoveryModal
-        open={recoveryOpen}
-        onUseDraft={() => {
-          // No-op: draft already loaded as effective.
-        }}
-        onUsePublished={() => {
-          if (draft?.id) {
-            discard.mutate(
-              { draftId: draft.id },
-              {
-                onSuccess: () => toast.success('已切回已发布'),
-                onError: (err: Error) =>
-                  toast.error(err.message ?? '操作失败'),
-              },
-            )
-          }
-        }}
-        onClose={() => setRecoveryOpen(false)}
-      />
       <DiscardConfirmModal
         open={discardOpen}
         dirtyFieldCount={dirtyFieldCount}

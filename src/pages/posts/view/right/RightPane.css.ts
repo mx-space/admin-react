@@ -9,7 +9,7 @@ export const paneStyle = style({
   flex: 1,
   minHeight: 0,
   minWidth: 0,
-  background: themeContract.color.canvas,
+  background: themeContract.color.surface1,
 })
 
 export const scrollWrapStyle = style({

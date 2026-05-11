@@ -27,7 +27,14 @@ export const mainStyle = style({
   display: 'flex',
   flexDirection: 'column',
   minWidth: 0,
-  height: '100%',
+  // Linear-style inset card: 主面浮于 chrome canvas 之上
+  // canvas (gap) ←→ sidebar (deepest chrome) ←→ main card (brightest focal)
+  background: themeContract.color.surface1,
+  borderRadius: themeContract.radius.md,
+  marginBlock: '8px',
+  marginInlineEnd: '8px',
+  marginInlineStart: '6px',
+  border: `1px solid ${themeContract.color.hairline}`,
   overflow: 'hidden',
 })
 

@@ -10,7 +10,7 @@ export const rootStyle = style({
   flexDirection: 'column',
   height: '100%',
   minHeight: 0,
-  background: themeContract.color.canvas,
+  background: themeContract.color.surface1,
 })
 
 export const headerStyle = style({
@@ -21,8 +21,8 @@ export const headerStyle = style({
   justifyContent: 'space-between',
   gap: themeContract.spacing.md,
   paddingInline: themeContract.spacing.md,
-  borderBottom: `1px solid ${themeContract.color.hairlineTertiary}`,
-  background: themeContract.color.canvas,
+  borderBottom: `1px solid ${themeContract.color.hairline}`,
+  background: themeContract.color.surface1,
 })
 
 export const titleStyle = style({
@@ -50,7 +50,7 @@ export const bodyStyle = style({
   flex: 1,
   minHeight: 0,
   display: 'flex',
-  background: themeContract.color.canvas,
+  background: themeContract.color.surface1,
 })
 
 export const bodyInnerRecipe = recipe({

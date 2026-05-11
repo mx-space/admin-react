@@ -31,7 +31,7 @@ export const KebabMenu = ({
   onDelete,
 }: KebabMenuProps) => {
   const [open, setOpen] = useState(false)
-  const triggerSize = variant === 'compact' ? 'sm' : 'md'
+  const triggerSize = 'sm'
 
   const close = (fn?: () => void) => () => {
     setOpen(false)

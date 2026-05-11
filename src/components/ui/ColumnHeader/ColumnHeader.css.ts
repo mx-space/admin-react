@@ -9,7 +9,7 @@ export const rootRecipe = recipe({
     display: 'flex',
     alignItems: 'center',
     height: chrome.headerHeight,
-    background: themeContract.color.canvas,
+    background: themeContract.color.surface1,
     borderBottom: `1px solid ${themeContract.color.hairline}`,
     flexShrink: 0,
   },

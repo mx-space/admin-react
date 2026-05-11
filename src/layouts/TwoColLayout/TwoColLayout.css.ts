@@ -8,7 +8,7 @@ export const rootStyle = style({
   flexDirection: 'column',
   height: '100%',
   minHeight: 0,
-  background: themeContract.color.canvas,
+  background: themeContract.color.surface1,
 })
 
 export const bodyStyle = style({
@@ -16,7 +16,7 @@ export const bodyStyle = style({
   minHeight: 0,
   display: 'flex',
   flexDirection: 'row',
-  background: themeContract.color.canvas,
+  background: themeContract.color.surface1,
   '@media': {
     [`(max-width: ${chrome.mobileBreakpoint - 1}px)`]: {
       flexDirection: 'column',
@@ -29,8 +29,8 @@ export const listPaneStyle = style({
   height: '100%',
   display: 'flex',
   flexDirection: 'column',
-  borderRight: `1px solid ${themeContract.color.hairlineTertiary}`,
-  background: themeContract.color.canvas,
+  borderRight: `1px solid ${themeContract.color.hairline}`,
+  background: themeContract.color.surface1,
   '@media': {
     [`(max-width: ${chrome.mobileBreakpoint - 1}px)`]: {
       width: '100%',
@@ -38,7 +38,7 @@ export const listPaneStyle = style({
       flex: 1,
       minHeight: 0,
       borderRight: 'none',
-      borderBottom: `1px solid ${themeContract.color.hairlineTertiary}`,
+      borderBottom: `1px solid ${themeContract.color.hairline}`,
     },
   },
 })
@@ -52,14 +52,14 @@ export const detailPaneStyle = style({
   minWidth: 0,
   height: '100%',
   display: 'flex',
-  background: themeContract.color.canvas,
+  background: themeContract.color.surface1,
 })
 
 export const detailDrawerInnerStyle = style({
   flex: 1,
   minHeight: 0,
   display: 'flex',
-  background: themeContract.color.canvas,
+  background: themeContract.color.surface1,
   color: themeContract.color.ink,
 })
 

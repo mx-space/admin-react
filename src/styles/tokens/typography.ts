@@ -148,6 +148,26 @@ export const typography = {
     lineHeight: 'normal',
     letterSpacing: '0',
   },
+  /**
+   * Sidebar 一级 / 二级导航项 — Linear 风：字重 500、字号 13，
+   * 不以大小立层级，唯凭明度阶 + 缩进 + 字重定主次。
+   */
+  navItem: {
+    size: fontSize.md,
+    weight: fontWeight.medium,
+    lineHeight: 'normal',
+    letterSpacing: '0',
+  },
+  /**
+   * Sidebar 分组标题 / Counter pill 通用规格 — 12 / 500，
+   * 仅以颜色 (text-tertiary) 与导航项区分，不用字重。
+   */
+  navGroup: {
+    size: fontSize.sm,
+    weight: fontWeight.medium,
+    lineHeight: 'normal',
+    letterSpacing: '0',
+  },
 } as const
 
 export type TypographyToken = keyof typeof typography

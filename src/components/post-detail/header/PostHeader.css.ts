@@ -7,7 +7,7 @@ export const externalLinkFullStyle = style({
   display: 'inline-flex',
   alignItems: 'center',
   gap: 6,
-  height: 32,
+  height: 28,
   paddingInline: '10px',
   background: 'transparent',
   border: 'none',

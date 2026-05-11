@@ -6,8 +6,12 @@ export type NavItemLeaf = {
   to: string
   label: string
   icon: LucideIcon
-  /** When true the route is not yet implemented; render dimmed but still clickable. */
+  /** 未实现路由：dim 显示，仍可点击。 */
   stub?: boolean
+  /** 右侧 counter pill；空或 0 不显示，>= 100 截断为 "99+"。 */
+  count?: number
+  /** L4 子树：作为父项之下的嵌套行，缩进 16px + 1px 连接线。 */
+  children?: NavItemLeaf[]
 }
 
 export type NavGroup = {

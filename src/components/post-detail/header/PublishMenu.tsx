@@ -38,7 +38,7 @@ export const PublishMenu = ({
     <div className={publishMenuRootStyle} data-testid="publish-menu">
       <Button
         intent="primary"
-        size={variant === 'full' ? 'md' : 'sm'}
+        size="sm"
         disabled={disabled}
         onClick={onPublish}
         className={
@@ -55,7 +55,7 @@ export const PublishMenu = ({
           render={
             <Button
               intent="primary"
-              size={variant === 'full' ? 'md' : 'sm'}
+              size="sm"
               aria-label="发布选项"
               className={
                 variant === 'full'

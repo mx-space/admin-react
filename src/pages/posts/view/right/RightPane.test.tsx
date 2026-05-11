@@ -191,14 +191,25 @@ describe('RightPane', () => {
     expect(screen.getByTestId('header-publish')).not.toBeDisabled()
   })
 
-  it('Recovery modal opens once when post+draft both present', () => {
+  it('Recovery banner shows once when post+draft both present, hides on action', () => {
     setupHookMocks({ draft: fakeDraft })
     const { unmount } = renderPane('p1')
-    expect(screen.getByTestId('recovery-modal')).toBeInTheDocument()
+    expect(screen.getByTestId('recovery-banner')).toBeInTheDocument()
 
-    fireEvent.click(screen.getByTestId('recovery-use-draft'))
-    expect(screen.queryByTestId('recovery-modal')).not.toBeInTheDocument()
+    fireEvent.click(screen.getByTestId('recovery-banner-use-draft'))
+    expect(screen.queryByTestId('recovery-banner')).not.toBeInTheDocument()
     unmount()
+  })
+
+  it('Recovery banner "用已发布" discards draft and hides banner', () => {
+    const { discardMutate } = setupHookMocks({ draft: fakeDraft })
+    renderPane('p1')
+    expect(screen.getByTestId('recovery-banner')).toBeInTheDocument()
+
+    fireEvent.click(screen.getByTestId('recovery-banner-use-published'))
+    expect(discardMutate).toHaveBeenCalledTimes(1)
+    expect(discardMutate.mock.calls[0][0]).toEqual({ draftId: 'd1' })
+    expect(screen.queryByTestId('recovery-banner')).not.toBeInTheDocument()
   })
 
   it('Slug field rejects invalid slug → no autosave commit', () => {
@@ -225,8 +236,8 @@ describe('RightPane', () => {
   it('Discard modal opens on header discard; confirm calls discard.mutate', () => {
     const { discardMutate } = setupHookMocks({ draft: fakeDraft })
     renderPane('p1')
-    // Close recovery modal first
-    fireEvent.click(screen.getByTestId('recovery-use-draft'))
+    // Hide recovery banner first (use-draft is no-op besides hiding)
+    fireEvent.click(screen.getByTestId('recovery-banner-use-draft'))
 
     fireEvent.click(screen.getByTestId('header-discard'))
     expect(screen.getByTestId('discard-modal')).toBeInTheDocument()
